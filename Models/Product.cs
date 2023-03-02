@@ -53,5 +53,6 @@ namespace ModelNTQ.Models
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<WishList> WishLists { get; set; }
         public virtual Category Category { get; set; }
+        public virtual Shop Shop { get; set; }
     }
 }

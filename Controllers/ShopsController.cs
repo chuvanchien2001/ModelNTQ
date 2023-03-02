@@ -48,14 +48,21 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,ShopName,ShopAddress,ShopPhone")] Shop shop)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Shops.Add(shop);
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    db.Shops.Add(shop);
+                    db.SaveChanges();
+                   
+                }
                 return RedirectToAction("Index");
             }
-
-            return View(shop);
+            catch(Exception ex)
+            {
+                ViewBag.Error = "Lỗi dữ liệu khi nhập" + ex.Message;
+                return View(shop);
+            }
         }
 
         // GET: Shops/Edit/5
@@ -80,13 +87,22 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,ShopName,ShopAddress,ShopPhone")] Shop shop)
         {
-            if (ModelState.IsValid)
+            try
             {
-                db.Entry(shop).State = EntityState.Modified;
-                db.SaveChanges();
+                if (ModelState.IsValid)
+                {
+                    db.Entry(shop).State = EntityState.Modified;
+                    db.SaveChanges();
+                   
+                }
                 return RedirectToAction("Index");
             }
-            return View(shop);
+           catch(Exception ex)
+            {
+                ViewBag.Error = "Lỗi dữ liệu khi sửa" + ex.Message;
+                return View(shop);
+            }
+          
         }
 
         // GET: Shops/Delete/5
@@ -110,9 +126,18 @@ namespace ModelNTQ.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Shop shop = db.Shops.Find(id);
-            db.Shops.Remove(shop);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            try
+            {
+                db.Shops.Remove(shop);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception ex)
+            {
+                ViewBag.Error = "Không xóa được danh mục này" + ex.Message;
+                return View("Delete", shop);
+            }
+            
         }
 
         protected override void Dispose(bool disposing)
