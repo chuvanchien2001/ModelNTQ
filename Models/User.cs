@@ -30,21 +30,12 @@
     
         public string Password { get; set; }
 
-        public int Role { get; set; }
-
+    
         [Required(ErrorMessage = "Email không được để trống")]
         [StringLength(30, MinimumLength = 10, ErrorMessage = "Email chưa đúng định dạng")]
-        [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$",ErrorMessage = "Email không hợp lệ")]
-        
+        [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", ErrorMessage = "Email không hợp lệ")]
+        public string ConfirmPassword { get; set; }
         public string Email { get; set; }
-
-        public int Status { get; set; }
-
-        public DateTime CreatedAt { get; set; }
-
-        public DateTime? UpdatedAt { get; set; }
-
-        public DateTime? DeletedAt { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Review> Reviews { get; set; }

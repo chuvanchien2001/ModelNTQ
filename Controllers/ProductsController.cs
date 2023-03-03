@@ -121,7 +121,7 @@ namespace ModelNTQ.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = "Lỗi sửa dữ liệu" + ex.Message;
-                ViewBag.CategoryID = new SelectList(db.Categories, "CategoryID", "CategoryName", product.CategoryID);
+                ViewBag.ProductID  = new SelectList(db.Products, "ProductID", "ProductName", product.CategoryID);
                 return View(product);
             }
         }

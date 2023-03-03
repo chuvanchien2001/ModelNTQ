@@ -1,0 +1,30 @@
+﻿@model ModelNTQ.Models.User
+
+@{
+    ViewBag.Title = "Register";
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+@using (Html.BeginForm("Register","Account",FormMethod.Post))
+            {
+                <div class="row">
+                    <div class="col-md-6">
+                         @Html.LabelFor(temp=>temp.UserName)
+                        @Html.TextBoxFor(temp=>temp.UserName,new{
+                        placeholder="UserName",@class="from-control"
+                        })
+                        @Html.ValidationMessageFor(temp=>temp.UserName)
+                    </div>
+                    <div class="col-md-6">
+                        @Html.LabelFor(temp => temp.Password)
+                        @Html.PasswordFor(temp => temp.Password, new
+                   {
+                       placeholder = "Password",
+                       @class = "from-control"
+                   })
+                    @Html.ValidationMessageFor(temp => temp.Password)
+
+                    </div>
+                </div>
+            }
+
