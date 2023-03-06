@@ -34,7 +34,6 @@
         [Required(ErrorMessage = "Email không được để trống")]
         [StringLength(30, MinimumLength = 10, ErrorMessage = "Email chưa đúng định dạng")]
         [RegularExpression(@"^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$", ErrorMessage = "Email không hợp lệ")]
-        public string ConfirmPassword { get; set; }
         public string Email { get; set; }
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]

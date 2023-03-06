@@ -13,7 +13,7 @@ namespace ModelNTQ.Controllers
     public class ProductsController : Controller
     {
         private ModelNTQDB db = new ModelNTQDB();
-
+        private List<Product> products = new List<Product>();
         // GET: Products
         public ActionResult Index()
         {
@@ -52,15 +52,7 @@ namespace ModelNTQ.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    product.Slug = "";
-                    var f = Request.Files["ImageFile"];
-                    if(f!=null &&f.ContentLength>0)
-                    {
-                        string FileName = System.IO.Path.GetFileName(f.FileName);
-                        string UpLoadPath = Server.MapPath("~/Image/images/") + FileName;
-                        f.SaveAs(UpLoadPath);
-                        product.Slug = FileName;
-                    }    
+
                     db.Products.Add(product);
                     db.SaveChanges(); 
                 }
@@ -101,16 +93,6 @@ namespace ModelNTQ.Controllers
             {
                 if (ModelState.IsValid)
                 {
-                    product.Slug = "";
-                    var f = Request.Files["ImageFile"];
-                    if (f != null && f.ContentLength > 0)
-                    {
-                        string FileName = System.IO.Path.GetFileName(f.FileName);
-                        string UpLoadPath = Server.MapPath("~/Image/images/") + FileName;
-                        f.SaveAs(UpLoadPath);
-                        product.Slug = FileName;
-                    }
-
                     db.Entry(product).State = EntityState.Modified;
                     db.SaveChanges();
 
@@ -121,14 +103,10 @@ namespace ModelNTQ.Controllers
             catch (Exception ex)
             {
                 ViewBag.Error = "Lỗi sửa dữ liệu" + ex.Message;
-                ViewBag.ProductID  = new SelectList(db.Products, "ProductID", "ProductName", product.CategoryID);
+                ViewBag.CategoryID  = new SelectList(db.Products, "CategoryID", "CategoryName", product.CategoryID);
                 return View(product);
             }
         }
-           
-         
-        
-
         // GET: Products/Delete/5
         public ActionResult Delete(int? id)
         {
@@ -162,6 +140,20 @@ namespace ModelNTQ.Controllers
                 db.Dispose();
             }
             base.Dispose(disposing);
+        }
+        public ActionResult Trending()
+        {
+            var model =products.Where(p =>p.Trending ).ToList();    
+            return View(model);
+        }
+        public ActionResult AddToTrending(int id)
+        {
+            var product = products.FirstOrDefault(p => p.Id == id);
+            if (product != null)
+            {
+                product.Trending = true;
+            }
+            return RedirectToAction("Trending");
         }
     }
 }

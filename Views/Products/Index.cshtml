@@ -54,11 +54,7 @@
             @Html.DisplayFor(modelItem => item.ShopID)
         </td>
         <td>
-            @{
-                string ImagePath = "~/Images/Image/" + item.Slug;
-            }
-            <img src="@Url.Content(ImagePath)" width="100" class="img-thumbnail" />
-            <br />
+           
             @Html.DisplayFor(modelItem => item.Slug)
         </td>
         <td>
