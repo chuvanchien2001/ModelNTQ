@@ -41,6 +41,18 @@
         <dd>
             @Html.DisplayFor(model => model.Detail)
         </dd>
+        <dt>
+            @Html.DisplayNameFor(model => model.Image)
+        </dt>
+
+        <dd>
+            @{
+                string ImagePath = "~/Images/Image/" + Model.Image;
+            }
+            <img src="@Url.Content(ImagePath)" width="70" class="img-thumbnail" />
+            <br />
+            @Html.DisplayFor(model => model.Image)
+        </dd>
 
         <dt>
             @Html.DisplayNameFor(model => model.Trending)

@@ -30,6 +30,8 @@ namespace ModelNTQ.Models
         [Required]
         public string Detail { get; set; }
 
+        public string Image { get; set; }
+
         public bool Trending { get; set; }
 
         public int Status { get; set; }

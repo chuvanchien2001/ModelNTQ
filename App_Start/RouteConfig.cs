@@ -18,6 +18,11 @@ namespace ModelNTQ
                 url: "{controller}/{action}/{id}",
                 defaults: new { controller = "Home", action = "Index", id = UrlParameter.Optional }
             );
+            routes.MapRoute(
+               name: "Register",
+               url: "Login",
+               defaults: new { controller = "Login", action = "Register", id = UrlParameter.Optional }
+           );
         }
     }
 }

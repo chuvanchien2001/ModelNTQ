@@ -48,6 +48,7 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,CategoryName,Status,CreatedAt,UpdatedAt,DeletedAt")] Category category)
         {
+            category.CreatedAt = DateTime.Now;
             try
             {
                 if (ModelState.IsValid)
@@ -89,6 +90,7 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,CategoryName,Status,CreatedAt,UpdatedAt,DeletedAt")] Category category)
         {
+            category.UpdatedAt = DateTime.Now;
             try
             {
                 if (ModelState.IsValid)
@@ -127,7 +129,9 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult DeleteConfirmed(int id)
         {
+    
             Category category = db.Categories.Find(id);
+            category.DeletedAt = DateTime.Now;
             try
             {
                 db.Categories.Remove(category);

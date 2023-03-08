@@ -8,7 +8,8 @@
     @Scripts.Render("~/bundles/modernizr")
 </head>
 <body>
-    <div class="navbar navbar-inverse navbar-fixed-top">
+    <div class="navbar navbar-expand navbar-inverse navbar-fixed-top">
+   
         <div class="container">
            
             <div class="navbar-collapse collapse">
@@ -19,6 +20,7 @@
                     <li>@Html.ActionLink("Shop", "Index", "Shops")</li> 
                 </ul>
             </div>
+            
             @{
             if (Session["UserName"] == null)
             {

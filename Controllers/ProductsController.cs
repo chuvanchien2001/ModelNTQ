@@ -7,17 +7,56 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ModelNTQ.Models;
+using PagedList;
 
 namespace ModelNTQ.Controllers
 {
     public class ProductsController : Controller
     {
         private ModelNTQDB db = new ModelNTQDB();
-        private List<Product> products = new List<Product>();
+        //private List<Product> products = new List<Product>();
         // GET: Products
-        public ActionResult Index()
+        public ActionResult Index(string sortOrder,string searchString,bool? trending,string currentFilter,int? page)
         {
-            return View(db.Products.ToList());
+            ViewBag.CurrentSort = sortOrder;
+            ViewBag.sortByViews = sortOrder == "NumberViews" ? "NumberViews_desc" : "NumberViews";
+            
+            if(searchString!=null)
+            {
+                page = 1;
+
+            }
+            else
+            {
+                searchString = currentFilter;
+            }
+            ViewBag.CurrentFilter = searchString;
+
+            var products = db.Products.Select(p => p);
+            if (!String.IsNullOrEmpty(searchString))
+            {
+                products = products.Where(p => p.Slug.Contains(searchString));
+            }
+            if (trending.HasValue && trending.Value)
+            {
+                products = products.Where(p => p.Trending);
+            }
+            
+            switch (sortOrder)
+            {
+                case "NumberViews":
+                    products = products.OrderBy(s => s.NumberViews);
+                    break;
+                case "NumberViews_desc":
+                    products = products.OrderByDescending(s => s.NumberViews);
+                    break;
+                default:
+                    break;
+            }
+            int pageSize = 3;
+            int pageNumber = (page ?? 1);
+            return View(products.ToPagedList(pageNumber,pageSize)); 
+           
         }
 
         // GET: Products/Details/5
@@ -48,11 +87,20 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Create([Bind(Include = "Id,CategoryID,ShopID,Slug,Detail,Trending,Status,NumberViews,Price,CreatedAt,UpdatedAt,DeletedAt")] Product product)
         {
+            product.CreatedAt = DateTime.Now;
             try
             {
                 if (ModelState.IsValid)
                 {
-
+                    product.Image = "";
+                    var f = Request.Files["ImageFile"];
+                    if(f!=null && f.ContentLength>0)
+                    {
+                        string FileName = System.IO.Path.GetFileName(f.FileName);
+                        string UploadPath = Server.MapPath("~/Images/Image/" + FileName);
+                        f.SaveAs(UploadPath);
+                        product.Image = FileName;
+                    }    
                     db.Products.Add(product);
                     db.SaveChanges(); 
                 }
@@ -89,21 +137,31 @@ namespace ModelNTQ.Controllers
         [ValidateAntiForgeryToken]
         public ActionResult Edit([Bind(Include = "Id,CategoryID,ShopID,Slug,Detail,Trending,Status,NumberViews,Price,CreatedAt,UpdatedAt,DeletedAt")] Product product)
         {
+            product.UpdatedAt = DateTime.Now;
             try
             {
                 if (ModelState.IsValid)
                 {
+                    product.Image = "";
+                    var f = Request.Files["ImageFile"];
+                    if (f != null && f.ContentLength > 0)
+                    {
+                        string FileName = System.IO.Path.GetFileName(f.FileName);
+                        string UploadPath = Server.MapPath("~/Images/Image/" + FileName);
+                        f.SaveAs(UploadPath);
+                        product.Image = FileName;
+                        db.Entry(product).State = EntityState.Modified;
+                        db.SaveChanges();
+                    }
                     db.Entry(product).State = EntityState.Modified;
                     db.SaveChanges();
-
                 }
                 return RedirectToAction("Index");
-
             }
             catch (Exception ex)
             {
                 ViewBag.Error = "Lỗi sửa dữ liệu" + ex.Message;
-                ViewBag.CategoryID  = new SelectList(db.Products, "CategoryID", "CategoryName", product.CategoryID);
+                ViewBag.CategoryID = new SelectList(db.Products, "CategoryID", "CategoryName", product.CategoryID);
                 return View(product);
             }
         }
@@ -128,9 +186,22 @@ namespace ModelNTQ.Controllers
         public ActionResult DeleteConfirmed(int id)
         {
             Product product = db.Products.Find(id);
-            db.Products.Remove(product);
-            db.SaveChanges();
-            return RedirectToAction("Index");
+            product.CreatedAt = DateTime.Now;
+            try
+            {
+                
+                db.Products.Remove(product);
+                db.SaveChanges();
+                return RedirectToAction("Index");
+            }
+            catch(Exception ex)
+            {
+
+                ViewBag.Error = "Không xóa được danh mục này" + ex.Message;
+                return View("Delete", product);
+            }
+        
+ 
         }
 
         protected override void Dispose(bool disposing)
@@ -141,19 +212,19 @@ namespace ModelNTQ.Controllers
             }
             base.Dispose(disposing);
         }
-        public ActionResult Trending()
-        {
-            var model =products.Where(p =>p.Trending ).ToList();    
-            return View(model);
-        }
-        public ActionResult AddToTrending(int id)
-        {
-            var product = products.FirstOrDefault(p => p.Id == id);
-            if (product != null)
-            {
-                product.Trending = true;
-            }
-            return RedirectToAction("Trending");
-        }
+        //public ActionResult Trending()
+        //{
+        //    var model =products.Where(p =>p.Trending ).ToList();    
+        //    return View(model);
+        //}
+        //public ActionResult AddToTrending(int id)
+        //{
+        //    var product = products.FirstOrDefault(p => p.Id == id);
+        //    if (product != null)
+        //    {
+        //        product.Trending = true;
+        //    }
+        //    return RedirectToAction("Trending");
+        //}
     }
 }
