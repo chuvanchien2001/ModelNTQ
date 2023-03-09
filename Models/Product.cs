@@ -46,6 +46,7 @@ namespace ModelNTQ.Models
 
         public DateTime? DeletedAt { get; set; }
 
+
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Media> Medias { get; set; }
 

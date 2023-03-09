@@ -14,14 +14,14 @@ namespace ModelNTQ.Controllers
         {
             return View();
         }
-        public ActionResult DisplaySuplier(int? page)
-        {
-            var supliers = db.Products.Select(c => c);
-            supliers = supliers.OrderBy(s => s.Id);
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(supliers.ToPagedList(pageNumber,pageSize));
-        }
+        //public ActionResult DisplaySuplier(int? page)
+        //{
+        //    var supliers = db.Products.Select(c => c);
+        //    supliers = supliers.OrderBy(s => s.Id);
+        //    int pageSize = 3;
+        //    int pageNumber = (page ?? 1);
+        //    return View(supliers.ToPagedList(pageNumber,pageSize));
+        //}
 
 
     }

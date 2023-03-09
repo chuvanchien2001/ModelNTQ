@@ -144,7 +144,6 @@ namespace ModelNTQ.Controllers
                 return View("Delete", category);
             }
 
-            
         }
 
         protected override void Dispose(bool disposing)

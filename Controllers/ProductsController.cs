@@ -7,7 +7,7 @@ using System.Net;
 using System.Web;
 using System.Web.Mvc;
 using ModelNTQ.Models;
-using PagedList;
+
 
 namespace ModelNTQ.Controllers
 {
@@ -16,26 +16,15 @@ namespace ModelNTQ.Controllers
         private ModelNTQDB db = new ModelNTQDB();
         //private List<Product> products = new List<Product>();
         // GET: Products
-        public ActionResult Index(string sortOrder,string searchString,bool? trending,string currentFilter,int? page)
+        public ActionResult Index(string sortOrder,string searchString,bool? trending/*,string currentFilter, int? page*/)
         {
             ViewBag.CurrentSort = sortOrder;
             ViewBag.sortByViews = sortOrder == "NumberViews" ? "NumberViews_desc" : "NumberViews";
             
-            if(searchString!=null)
-            {
-                page = 1;
-
-            }
-            else
-            {
-                searchString = currentFilter;
-            }
-            ViewBag.CurrentFilter = searchString;
-
             var products = db.Products.Select(p => p);
             if (!String.IsNullOrEmpty(searchString))
             {
-                products = products.Where(p => p.Slug.Contains(searchString));
+                products = products.Where(s => s.Slug.Contains(searchString));
             }
             if (trending.HasValue && trending.Value)
             {
@@ -53,10 +42,11 @@ namespace ModelNTQ.Controllers
                 default:
                     break;
             }
-            int pageSize = 3;
-            int pageNumber = (page ?? 1);
-            return View(products.ToPagedList(pageNumber,pageSize)); 
-           
+            return View(products.ToList());
+            //int pageSize = 3;
+            //int pageNumber = (page ?? 1);
+            //return View(products.ToPagedList(pageNumber, pageSize));
+
         }
 
         // GET: Products/Details/5

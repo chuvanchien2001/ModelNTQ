@@ -33,7 +33,7 @@ namespace ModelNTQ.Controllers
             }
             else
             {
-                Session["UserName"] = username;
+                Session["user"] = user;
                 return RedirectToAction("MyProfile","MyProfile");
             }
         }

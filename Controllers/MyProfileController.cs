@@ -16,7 +16,7 @@ namespace ModelNTQ.Controllers
         private ModelNTQDB db = new ModelNTQDB();
         public ActionResult MyProfile()
         {
-            if (Session["UserName"] == null)
+            if (Session["user"] == null)
             {
                 return Content("<h1>Bạn cần đăng nhập trước khi vào giao diện</h1><a href='/Login/Login'>Đăng nhập</a>");
             }
@@ -31,7 +31,7 @@ namespace ModelNTQ.Controllers
             if (name == null)
             {
                 ViewBag.ErrorUserNameVal = "Username không được để trống";
-                return View("MyProfile");
+                return View("MyProfile",u);
             }
             if (u.UserName != name)
             {
@@ -42,7 +42,7 @@ namespace ModelNTQ.Controllers
                 else
                 {
                     ViewBag.ErrorUserNameVal = "Username dã tồn tại";
-                    return View("MyProfile");
+                    return View("MyProfile",u);
                 }
             }
 
@@ -51,7 +51,7 @@ namespace ModelNTQ.Controllers
             if (containsSpecialChars)
             {
                 ViewBag.ErrorUserNameVal = "Chuỗi không được chứa ký tự đặc biệt";
-                return View("MyProfile");
+                return View("MyProfile",u);
             }
             u.UpdatedAt = DateTime.Now;
 
@@ -59,22 +59,22 @@ namespace ModelNTQ.Controllers
             if (password_new != null)
             {
                 string password_new_comfirm = Request["password_new_comfirm"];
-                string passwordPattern = @"^(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,20}$";
+                string passwordPattern = @"^(?=.*[A-Z])(?=.*[0-9])(?=.*[^\w\s]).{8,20}$";//*"[^a-zA-Z0-9]";
                 if (!Regex.IsMatch(password_new, passwordPattern))
                 {
                     ViewBag.Error = "Password phải từ 8-20 kí tự bao gồm ít nhất 1 kí tự số, 1 kí tự viết hoa và 1 kí tự đặc biệt";
-                    return View("MyProfile");
+                    return View("MyProfile",u);
                 }
                 if (string.IsNullOrEmpty(password_new_comfirm))
                 {
                     ViewBag.Error = "Confirm password không được để trống";
-                    return View("MyProfile");
+                    return View("MyProfile",u);
                 }
                 SHA256 sha = SHA256.Create();
                 if (password_new != password_new_comfirm)
                 {
                     ViewBag.Error = "password và confirm passowrd không khớp";
-                    return View("MyProfile");
+                    return View("MyProfile",u);
                 }
                 byte[] rs = sha.ComputeHash(Encoding.UTF8.GetBytes(password_new));
                 password_new = BitConverter.ToString(rs).Replace("-", string.Empty);
@@ -83,7 +83,7 @@ namespace ModelNTQ.Controllers
 
             db.SaveChanges();
             ViewBag.Success = "Sửa thông tin thành công";
-            return View("MyProfile", u);
+            return RedirectToAction("Index", "Users");
         }
     }
 }
