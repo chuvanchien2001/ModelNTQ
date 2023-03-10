@@ -24,10 +24,6 @@ namespace ModelNTQ.Controllers
             {
                 users = users.Where(s => s.UserName.Contains(searchName));
             }
-             users = (IQueryable<User>)db.Users.Where(u => u.IsDeleted == false).ToList();
-            var deletedUsers = db.Users.Where(u => u.IsDeleted == true).ToList();
-
-
             switch (sortOrder)
             {
                 case "CreatedAt":
