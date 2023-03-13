@@ -1,8 +1,11 @@
 ﻿@model IEnumerable<ModelNTQ.Models.Product>
 @*<link href="~/Content/PagedList.css" rel="stylesheet" type="text/css" />*@
 
-<div class="product" style="padding:70px">
+<div class="product" style="padding:90px">
     <h2> SẢN PHẨM</h2>
+    <p>
+        @Html.ActionLink("Create New", "Create")
+    </p>
     @using (Html.BeginForm())
     {
         <p>
@@ -18,7 +21,7 @@
         </div>
 
     }
-  
+
     <table class="table">
         <tr>
             <th>
@@ -43,7 +46,9 @@
                 Status
             </th>
             <th>
-                @Html.ActionLink("NumberViews", "Index", new { sortOrder = ViewBag.sortByViews @*, currentFilter = ViewBag.CurrentFilter*@ })
+                @Html.ActionLink("NumberViews", "Index", new
+                {
+                    sortOrder = ViewBag.sortByViews@*, currentFilter = ViewBag.CurrentFilter*@})
 
             </th>
             <th>
@@ -117,6 +122,6 @@
 
     </table>
     @*Trang @(Model.PageCount < Model.PageNumber ? 0: Model.PageNumber)/ @Model.PageCount
-    @Html.PagedListPager(Model, page => Url.Action("Index", 
-    new { page,sortOrder=ViewBag.CurrentSort,currentFilter=ViewBag.CurrentFilter }))*@
+        @Html.PagedListPager(Model, page => Url.Action("Index",
+        new { page,sortOrder=ViewBag.CurrentSort,currentFilter=ViewBag.CurrentFilter }))*@
 </div>
